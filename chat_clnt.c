@@ -38,6 +38,23 @@ int main(int argc, char* argv[])
 
 	if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr))==-1)
 		error_handling("connect() error");
+	/*
+	whille(flag=false){
+		number = Display(); login or join
+		if(number = login)
+			login();
+			receive signal from server
+			if(signal = yes)
+			   flag = true;
+			else
+			   flag = false;
+		else
+			join();
+			// 중복체크 //
+			login();
+		}
+	}
+	*/
 	pthread_create(&snd_thread, NULL, send_msg, (void*)&sock);
 	pthread_create(&rcv_thread, NULL, recv_msg, (void*)&sock);
 	pthread_join(snd_thread, &thread_return);
@@ -87,3 +104,19 @@ void error_handling(char* msg)
 	fputc('\n', stderr);
 	exit(1);
 }
+
+/*
+int Display(){
+	1. login
+	2. join
+	return number
+}
+
+void login(){
+	input ID, password
+	send ID, password to server
+	}
+
+void join(){
+}
+*/
