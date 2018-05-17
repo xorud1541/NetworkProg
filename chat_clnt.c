@@ -12,13 +12,14 @@
 void* send_msg(void *arg);
 void* recv_msg(void *arg);
 void error_handling(char* msg);
+int selectroom(void);
 
 char name[NAME_SIZE] = "[DEFAULT]";
 char msg[BUF_SIZE];
 
 int main(int argc, char* argv[])
 {
-	int sock;
+	int sock, sel;
 	struct sockaddr_in serv_addr;
 	pthread_t snd_thread, rcv_thread;
 	void * thread_return;
@@ -55,12 +56,31 @@ int main(int argc, char* argv[])
 		}
 	}
 	*/
+	sel = selectroom();
+	if(sel==1){
+		char* ch1 = "one";
+		write(sock, ch1, strlen(ch1));
+		
+	} else if(sel==2){
+		char* ch2 = "two";
+		write(sock, ch2, strlen(ch2));
+	}
+
 	pthread_create(&snd_thread, NULL, send_msg, (void*)&sock);
 	pthread_create(&rcv_thread, NULL, recv_msg, (void*)&sock);
 	pthread_join(snd_thread, &thread_return);
 	pthread_join(rcv_thread, &thread_return);
 	close(sock);
 	return 0;
+}
+
+int selectroom(void){
+	int num;
+	printf(" select chat room! \n");
+	printf(" 1. No.1 chat room \n");
+	printf(" 2. No.2 char room \n");
+	printf(" >> "); scanf("%d", &num);
+	return num;
 }
 
 void * send_msg(void * arg)
